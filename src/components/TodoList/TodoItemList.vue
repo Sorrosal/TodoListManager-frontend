@@ -5,7 +5,7 @@
       :key="category"
       class="q-mb-lg"
     >
-      <div class="text-h6 q-mb-md">{{ category }}</div>
+      <div class="text-h6 category-header q-mb-md">{{ category }}</div>
       <div class="row q-col-gutter-md">
         <div
           v-for="item in categoryItems"
