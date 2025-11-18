@@ -92,6 +92,58 @@ npm run format
 yarn format
 ```
 
+## ✅ Unit Tests
+
+This project uses Vitest for unit and component tests. Below are instructions for running the test suite on Windows PowerShell (the default shell used during development for this repository).
+
+Requirements
+- Node.js (recommended >= 16 — see `engines` in `package.json`)
+- Project dependencies installed (`npm install` or `yarn install`)
+
+Useful commands
+- Run all tests (CI mode):
+```powershell
+npm run test
+```
+
+- Run tests in watch mode (useful during development):
+```powershell
+npm run test:watch
+```
+
+- Open the Vitest UI (browser):
+```powershell
+npm run test:ui
+```
+
+- Run tests and generate coverage report:
+```powershell
+npm run test:coverage
+```
+
+Run a specific test
+- You can run a single test file by passing its path to Vitest. Example for the `TodoItemList` spec:
+```powershell
+npx vitest run src/components/TodoList/__tests__/TodoItemList.spec.ts
+```
+
+Troubleshooting notes
+- If tests fail due to missing dependencies or configuration issues, try removing `node_modules` and reinstalling:
+```powershell
+rm -r node_modules; npm install
+```
+
+- On Windows PowerShell, if you get permission or long-path errors, run the terminal as Administrator or enable long paths in Windows settings.
+- If Vitest needs a DOM-like environment for component tests, the project includes `happy-dom`/`jsdom` in `devDependencies`, so tests should run without a real browser.
+
+Quick verification
+- To quickly verify after cloning the repo:
+```powershell
+npm install
+npm run test
+```
+
+
 ## 📁 Project Structure
 
 ```
