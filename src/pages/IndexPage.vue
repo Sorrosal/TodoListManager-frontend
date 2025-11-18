@@ -80,7 +80,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { QTableColumn } from 'quasar';
+import type { QTableColumn } from 'quasar';
 
 interface Item {
   id: number;
