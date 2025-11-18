@@ -66,25 +66,25 @@ class ApiClient {
               typeof data === 'object' &&
               data !== null &&
               'error' in data &&
-              typeof (data as any).error === 'string'
+              typeof (data as { error?: unknown }).error === 'string'
             ) {
               // API sometimes returns { error: '...' }
-              message = (data as any).error;
+              message = (data as { error: string }).error;
               // API sometimes returns { error: '...' }
             } else if (
               typeof data === 'object' &&
               data !== null &&
               'message' in data &&
-              typeof (data as any).message === 'string'
+              typeof (data as { message?: unknown }).message === 'string'
             ) {
-              message = (data as any).message;
+              message = (data as { message: string }).message;
             } else if (
               typeof data === 'object' &&
               data !== null &&
               'errors' in data
             ) {
               // errors can be an object with arrays or an array of strings
-              const errorsField = (data as any).errors;
+              const errorsField = (data as { errors: unknown }).errors;
               if (Array.isArray(errorsField)) {
                 message = errorsField.join(', ');
               } else if (errorsField && typeof errorsField === 'object') {

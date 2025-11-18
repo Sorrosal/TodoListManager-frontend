@@ -82,7 +82,6 @@ describe('TodoFormDialog', () => {
       attachTo: document.body,
     });
 
-    const inputs = wrapper.findAll('input, select, textarea');
     // Should only have description field in edit mode
     expect(wrapper.text()).toContain('Description');
     wrapper.unmount();

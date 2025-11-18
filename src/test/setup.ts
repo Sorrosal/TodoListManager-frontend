@@ -1,6 +1,7 @@
 import { config } from '@vue/test-utils';
 import { Quasar, Dialog, Notify } from 'quasar';
 import { vi } from 'vitest';
+import type { VNode } from 'vue';
 
 // Configure Vue Test Utils
 config.global.plugins = [
@@ -29,19 +30,27 @@ config.global.stubs = {
 // Stub Quasar directives
 config.global.directives = {
   'close-popup': {
-    mounted(el, binding, vnode) {
+    mounted(el: HTMLElement, binding: unknown, vnode: VNode) {
       el.setAttribute('data-close-popup', 'true');
       el.addEventListener('click', () => {
         // Walk up the component tree to find the dialog
-        let instance = vnode.ctx;
-        while (instance) {
+        let instance: unknown = vnode.component && vnode.component.proxy;
+        while (instance && typeof instance === 'object') {
           // Check if this component has modelValue prop (likely a dialog)
-          if (instance.props?.modelValue !== undefined) {
+          if (
+            '$props' in instance &&
+            (instance as { $props: { modelValue?: unknown } }).$props?.modelValue !== undefined
+          ) {
             // Emit the update:modelValue event
-            instance.emit?.('update:modelValue', false);
+            if (
+              '$emit' in instance &&
+              typeof (instance as { $emit: (event: string, ...args: unknown[]) => void }).$emit === 'function'
+            ) {
+              (instance as { $emit: (event: string, ...args: unknown[]) => void }).$emit('update:modelValue', false);
+            }
             break;
           }
-          instance = instance.parent;
+          instance = (instance as { $parent?: unknown }).$parent;
         }
       });
     },
@@ -49,17 +58,27 @@ config.global.directives = {
 };
 
 // Mock localStorage
-const localStorageMock = {
+const localStorageMock: Partial<Storage> = {
   getItem: vi.fn(),
   setItem: vi.fn(),
   removeItem: vi.fn(),
   clear: vi.fn(),
+  key: vi.fn(),
+  length: 0,
 };
-global.localStorage = localStorageMock as Storage;
+Object.defineProperty(global, 'localStorage', {
+  value: localStorageMock,
+  configurable: true,
+});
 
-// Mock window.location
-delete (window as { location?: unknown }).location;
-window.location = { reload: vi.fn() } as unknown as Location;
+// Mock window.location.reload only
+Object.defineProperty(window, 'location', {
+  value: {
+    ...window.location,
+    reload: vi.fn(),
+  },
+  configurable: true,
+});
 
 // Mock console methods to reduce noise in tests
 global.console = {

@@ -81,7 +81,7 @@ describe('TodoItemList', () => {
     expect((firstCard?.props() as any).progressColor).toBe('warning');
   });
 
-  it('should emit edit event from child card', async () => {
+  it('should emit edit event from child card', () => {
     const wrapper = mount(TodoItemList, {
       props: {
         itemsByCategory: mockItemsByCategory,
@@ -97,7 +97,7 @@ describe('TodoItemList', () => {
     expect(wrapper.emitted('edit')?.[0]).toEqual([mockItems[0]]);
   });
 
-  it('should emit add-progress event from child card', async () => {
+  it('should emit add-progress event from child card', () => {
     const wrapper = mount(TodoItemList, {
       props: {
         itemsByCategory: mockItemsByCategory,
@@ -113,7 +113,7 @@ describe('TodoItemList', () => {
     expect(wrapper.emitted('add-progress')?.[0]).toEqual([mockItems[0]]);
   });
 
-  it('should emit view-history event from child card', async () => {
+  it('should emit view-history event from child card', () => {
     const wrapper = mount(TodoItemList, {
       props: {
         itemsByCategory: mockItemsByCategory,
@@ -129,7 +129,7 @@ describe('TodoItemList', () => {
     expect(wrapper.emitted('view-history')?.[0]).toEqual([mockItems[0]]);
   });
 
-  it('should emit delete event from child card', async () => {
+  it('should emit delete event from child card', () => {
     const wrapper = mount(TodoItemList, {
       props: {
         itemsByCategory: mockItemsByCategory,

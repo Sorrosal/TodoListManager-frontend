@@ -72,8 +72,6 @@ const minPercentComputed = computed(() => {
   return typeof props.minPercent === 'number' ? props.minPercent : 0;
 });
 
-const remaining = computed(() => Math.max(0, 100 - (props.progressData?.percent ?? 0)));
-
 function onSliderUpdate (value: number | null) {
   // Prevent user from moving slider below the current accumulated progress
   const min = minPercentComputed.value ?? 0;
