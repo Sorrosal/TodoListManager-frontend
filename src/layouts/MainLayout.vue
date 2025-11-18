@@ -38,7 +38,12 @@ const router = useRouter();
 const user = ref<UserInfo | null>(null);
 
 const isAuthenticated = computed(() => authService.isAuthenticated());
-const username = computed(() => user.value?.username || 'User');
+const username = computed(() => {
+  if (!user.value) return 'User';
+  // Handle case where username might be wrapped in an object
+  const name = user.value.username;
+  return typeof name === 'string' ? name : (name as { value?: string })?.value || 'User';
+});
 
 onMounted(async () => {
   if (isAuthenticated.value) {

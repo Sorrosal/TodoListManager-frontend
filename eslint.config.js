@@ -67,6 +67,12 @@ export default defineConfigWithVueTs(
 
       // allow debugger during development only
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+      
+      // Allow v-model on props for form components (controlled by parent)
+      'vue/no-mutating-props': 'off',
+      
+      // Require Error objects when rejecting promises
+      '@typescript-eslint/prefer-promise-reject-errors': 'error',
     },
   },
 

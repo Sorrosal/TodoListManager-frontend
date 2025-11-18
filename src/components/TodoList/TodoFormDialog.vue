@@ -24,9 +24,10 @@
             rows="3"
             :rules="[(val) => !!val || 'Description is required']"
           />
-          <q-input
+          <q-select
             v-if="!editingItem"
             v-model="formData.category"
+            :options="['Work', 'Personal', 'Shopping', 'Health', 'Education', 'Finance', 'Home']"
             label="Category"
             outlined
             :rules="[(val) => !!val || 'Category is required']"
@@ -64,7 +65,7 @@ interface Props {
 defineProps<Props>();
 
 defineEmits<{
-  (e: 'update:modelValue', value: boolean): void;
-  (e: 'save'): void;
+  'update:modelValue': [value: boolean];
+  'save': [];
 }>();
 </script>

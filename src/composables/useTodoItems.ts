@@ -108,7 +108,7 @@ export function useTodoItems() {
               message: axiosError?.response?.data?.message || 'Failed to delete task.',
               position: 'top',
             });
-            reject(error);
+            reject(error instanceof Error ? error : new Error(String(error)));
           }
         })();
       }).onCancel(() => {

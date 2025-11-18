@@ -22,7 +22,7 @@ export function useTodoDialogs() {
   });
 
   const progressData = ref({
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().slice(0, 16),
     percent: 0,
   });
 
@@ -44,7 +44,7 @@ export function useTodoDialogs() {
   const openProgressDialog = (item: TodoItem) => {
     progressItem.value = item;
     progressData.value = {
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().slice(0, 16),
       percent: 0,
     };
     showProgressDialogFlag.value = true;

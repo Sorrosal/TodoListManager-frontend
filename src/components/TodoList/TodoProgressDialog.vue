@@ -9,8 +9,8 @@
         <q-form @submit="$emit('save')" class="q-gutter-md">
           <q-input
             v-model="progressData.date"
-            label="Date"
-            type="date"
+            label="Date and Time"
+            type="datetime-local"
             outlined
             :rules="[(val) => !!val || 'Date is required']"
           />
@@ -46,7 +46,7 @@
 interface Props {
   modelValue: boolean;
   progressData: {
-    date: string;
+    date: string | undefined;
     percent: number;
   };
   isSaving: boolean;
@@ -55,7 +55,7 @@ interface Props {
 defineProps<Props>();
 
 defineEmits<{
-  (e: 'update:modelValue', value: boolean): void;
-  (e: 'save'): void;
+  'update:modelValue': [value: boolean];
+  'save': [];
 }>();
 </script>
