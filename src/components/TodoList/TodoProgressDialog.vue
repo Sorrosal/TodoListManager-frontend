@@ -14,18 +14,24 @@
             outlined
             :rules="[(val) => !!val || 'Date is required']"
           />
-          <q-input
-            v-model.number="progressData.percent"
-            label="Progress (%)"
-            type="number"
-            outlined
-            min="0"
-            max="100"
-            :rules="[
-              (val) => val !== null || 'Progress is required',
-              (val) => val >= 0 && val <= 100 || 'Must be between 0 and 100',
-            ]"
-          />
+          <div>
+            <div class="row items-center q-mb-xs">
+              <label class="text-subtitle2">Progress (%)</label>
+              <q-space />
+              <div class="text-caption text-weight-bold">{{ progressData.percent }}%</div>
+            </div>
+            <div class="row items-center">
+              <q-slider
+                v-model.number="progressData.percent"
+                :min="0"
+                :max="100"
+                :step="1"
+                dense
+                label
+                @update:model-value="onSliderUpdate"
+              />
+            </div>
+          </div>
 
           <div class="row justify-end q-gutter-sm">
             <q-btn flat label="Cancel" v-close-popup />
@@ -50,12 +56,33 @@ interface Props {
     percent: number;
   };
   isSaving: boolean;
+  minPercent?: number;
 }
-
-defineProps<Props>();
 
 defineEmits<{
   'update:modelValue': [value: boolean];
   'save': [];
 }>();
+
+import { computed } from 'vue';
+
+const props = defineProps<Props>();
+
+const minPercentComputed = computed(() => {
+  return typeof props.minPercent === 'number' ? props.minPercent : 0;
+});
+
+const remaining = computed(() => Math.max(0, 100 - (props.progressData?.percent ?? 0)));
+
+function onSliderUpdate (value: number | null) {
+  // Prevent user from moving slider below the current accumulated progress
+  const min = minPercentComputed.value ?? 0;
+  const v = value ?? min;
+  if (v < min) {
+    // reset to min
+    props.progressData.percent = min;
+  } else {
+    props.progressData.percent = v;
+  }
+}
 </script>

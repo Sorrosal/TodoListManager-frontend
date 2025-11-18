@@ -23,7 +23,7 @@
         :get-latest-progress="getLatestProgress"
         :get-progress-color="getProgressColor"
         @edit="openEditDialog"
-        @add-progress="openProgressDialog"
+        @add-progress="openProgressDialogHandler"
         @view-history="openHistoryDialog"
         @delete="deleteItem"
       />
@@ -43,6 +43,7 @@
       v-model="showProgressDialogFlag"
       :progress-data="progressData"
       :is-saving="isSaving"
+      :min-percent="currentMinPercent"
       @save="handleSaveProgress"
     />
 
@@ -102,6 +103,18 @@ const {
   closeProgressDialog,
 } = useTodoDialogs();
 
+import { computed } from 'vue';
+import type { TodoItem } from 'src/models';
+
+const openProgressDialogHandler = (item: TodoItem) => {
+  const min = getLatestProgress(item) ?? 0;
+  openProgressDialog(item, min);
+};
+
+const currentMinPercent = computed(() => {
+  return progressItem.value ? getLatestProgress(progressItem.value) ?? 0 : 0;
+});
+
 // Lifecycle
 onMounted(async () => {
   await fetchItems();
@@ -129,10 +142,16 @@ const handleSaveProgress = async () => {
   
   isSaving.value = true;
   try {
-    await registerProgress(progressItem.value.id, {
-      date: new Date(progressData.value.date || new Date()).toISOString(),
-      percent: progressData.value.percent,
-    });
+    const current = getLatestProgress(progressItem.value) ?? 0;
+    const desiredTotal = progressData.value.percent;
+    const delta = Math.max(0, desiredTotal - current);
+
+    if (delta > 0) {
+      await registerProgress(progressItem.value.id, {
+        date: new Date(progressData.value.date || new Date()).toISOString(),
+        percent: delta,
+      });
+    }
     closeProgressDialog();
   } finally {
     isSaving.value = false;

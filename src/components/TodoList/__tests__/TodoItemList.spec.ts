@@ -91,7 +91,7 @@ describe('TodoItemList', () => {
     });
 
     const firstCard = wrapper.findAllComponents(TodoItemCard)[0];
-    await firstCard?.vm.$emit('edit', mockItems[0]);
+  firstCard?.vm.$emit('edit', mockItems[0]);
 
     expect(wrapper.emitted('edit')).toBeTruthy();
     expect(wrapper.emitted('edit')?.[0]).toEqual([mockItems[0]]);
@@ -107,7 +107,7 @@ describe('TodoItemList', () => {
     });
 
     const firstCard = wrapper.findAllComponents(TodoItemCard)[0];
-    await firstCard?.vm.$emit('add-progress', mockItems[0]);
+  firstCard?.vm.$emit('add-progress', mockItems[0]);
 
     expect(wrapper.emitted('add-progress')).toBeTruthy();
     expect(wrapper.emitted('add-progress')?.[0]).toEqual([mockItems[0]]);
@@ -123,7 +123,7 @@ describe('TodoItemList', () => {
     });
 
     const firstCard = wrapper.findAllComponents(TodoItemCard)[0];
-    await firstCard?.vm.$emit('view-history', mockItems[0]);
+  firstCard?.vm.$emit('view-history', mockItems[0]);
 
     expect(wrapper.emitted('view-history')).toBeTruthy();
     expect(wrapper.emitted('view-history')?.[0]).toEqual([mockItems[0]]);
@@ -139,7 +139,7 @@ describe('TodoItemList', () => {
     });
 
     const firstCard = wrapper.findAllComponents(TodoItemCard)[0];
-    await firstCard?.vm.$emit('delete', mockItems[0]);
+  firstCard?.vm.$emit('delete', mockItems[0]);
 
     expect(wrapper.emitted('delete')).toBeTruthy();
     expect(wrapper.emitted('delete')?.[0]).toEqual([mockItems[0]]);

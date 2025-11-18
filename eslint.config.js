@@ -85,5 +85,14 @@ export default defineConfigWithVueTs(
     },
   },
 
+  // Relax some rules for test files where common mocking patterns are used
+  {
+    files: ['src/**/__tests__/**', 'src/**/?(*.)+(spec|test).ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/await-thenable': 'off',
+    },
+  },
+
   prettierSkipFormatting,
 );

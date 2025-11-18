@@ -10,6 +10,9 @@ const API_URL = process.env.API_URL || 'https://localhost:7292';
 
 class ApiClient {
   private client: AxiosInstance;
+  // Simple cache to avoid showing duplicate notifications in a short time window
+  private recentNotifications: Map<string, number> = new Map();
+  private notificationTtl = 2000; // ms
 
   constructor() {
     this.client = axios.create({
@@ -43,26 +46,78 @@ class ApiClient {
       (response: AxiosResponse) => response,
       (error: AxiosError) => {
         if (error.response) {
-          switch (error.response.status) {
-            case 401:
-              // Unauthorized - clear token and redirect to login
-              localStorage.removeItem('auth_token');
-              if (window.location.pathname !== '/login') {
-                window.location.href = '/login';
+          // Handle specific status codes
+          if (error.response.status === 401) {
+            // Unauthorized - clear token and redirect to login
+            localStorage.removeItem('auth_token');
+            if (window.location.pathname !== '/login') {
+              window.location.href = '/login';
+            }
+          } else {
+            // For other statuses, try to extract a useful message from the response
+            const data: unknown = error.response.data;
+            let message = 'An error occurred';
+
+            if (!data) {
+              message = `Request failed with status ${error.response.status}`;
+            } else if (typeof data === 'string') {
+              message = data;
+            } else if (
+              typeof data === 'object' &&
+              data !== null &&
+              'error' in data &&
+              typeof (data as any).error === 'string'
+            ) {
+              // API sometimes returns { error: '...' }
+              message = (data as any).error;
+              // API sometimes returns { error: '...' }
+            } else if (
+              typeof data === 'object' &&
+              data !== null &&
+              'message' in data &&
+              typeof (data as any).message === 'string'
+            ) {
+              message = (data as any).message;
+            } else if (
+              typeof data === 'object' &&
+              data !== null &&
+              'errors' in data
+            ) {
+              // errors can be an object with arrays or an array of strings
+              const errorsField = (data as any).errors;
+              if (Array.isArray(errorsField)) {
+                message = errorsField.join(', ');
+              } else if (errorsField && typeof errorsField === 'object') {
+                // Collect first messages
+                const parts: string[] = [];
+                Object.values(errorsField).forEach((val) => {
+                  if (Array.isArray(val)) {
+                    parts.push(...val.map((v) => String(v)));
+                  } else if (typeof val === 'string') {
+                    parts.push(val);
+                  }
+                });
+                if (parts.length) {
+                  message = parts.join(' | ');
+                }
               }
-              break;
-            case 403:
-              // Forbidden - let component handle the message
-              break;
-            case 404:
-              // Not found - let component handle the message
-              break;
-            case 500:
-              // Server error - let component handle the message
-              break;
-            default:
-              // Other errors - let component handle
-              break;
+            } else {
+              // fallback to status text
+              message = error.response.statusText || message;
+            }
+
+            // Show notification to the user, but avoid duplicates within a short window
+            const now = Date.now();
+            const key = `error:${message}`;
+            const last = this.recentNotifications.get(key) ?? 0;
+            if (now - last > this.notificationTtl) {
+              this.recentNotifications.set(key, now);
+              Notify.create({
+                type: 'negative',
+                message,
+                position: 'top',
+              });
+            }
           }
         } else if (error.request) {
           Notify.create({

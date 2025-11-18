@@ -27,7 +27,7 @@
           <q-select
             v-if="!editingItem"
             v-model="formData.category"
-            :options="['Work', 'Personal', 'Shopping', 'Health', 'Education', 'Finance', 'Home']"
+            :options="['Work', 'Personal', 'Learning']"
             label="Category"
             outlined
             :rules="[(val) => !!val || 'Category is required']"

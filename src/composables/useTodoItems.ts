@@ -139,12 +139,14 @@ export function useTodoItems() {
     }
   };
 
+  // Return the accumulated progress based on progression entries.
+  // Sum all percent values in the item's progressions and cap at 100.
   const getLatestProgress = (item: TodoItem): number | null => {
     if (!item.progressions || item.progressions.length === 0) {
       return null;
     }
-    const latest = item.progressions[item.progressions.length - 1];
-    return latest?.percent ?? null;
+    const sum = item.progressions.reduce((acc, p) => acc + (p.percent ?? 0), 0);
+    return Math.min(100, sum);
   };
 
   const getProgressColor = (percent: number): string => {

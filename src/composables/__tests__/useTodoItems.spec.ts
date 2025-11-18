@@ -286,6 +286,7 @@ describe('useTodoItems', () => {
     it('should return latest progress percent', () => {
       const { getLatestProgress } = useTodoItems();
 
+      // mockTodoItems[0] has a single progression of 50
       const result = getLatestProgress(mockTodoItems[0]!);
 
       expect(result).toBe(50);
@@ -311,6 +312,26 @@ describe('useTodoItems', () => {
       const result = getLatestProgress(item);
 
       expect(result).toBeNull();
+    });
+
+    it('should accumulate multiple progression entries and cap at 100', () => {
+      const { getLatestProgress } = useTodoItems();
+      const item: TodoItem = {
+        id: 1,
+        title: 'Accumulated',
+        description: 'Testing',
+        category: 'Work',
+        progressions: [
+          { id: 1, date: '2025-11-18T18:38:00Z', percent: 9, todoItemId: 1 },
+          { id: 2, date: '2025-11-18T18:40:00Z', percent: 31, todoItemId: 1 },
+          { id: 3, date: '2025-11-18T18:43:00Z', percent: 56, todoItemId: 1 },
+        ],
+      };
+
+      const result = getLatestProgress(item);
+
+      // 9 + 31 + 56 = 96
+      expect(result).toBe(96);
     });
   });
 

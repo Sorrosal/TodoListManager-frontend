@@ -41,11 +41,11 @@ export function useTodoDialogs() {
     showAddDialog.value = true;
   };
 
-  const openProgressDialog = (item: TodoItem) => {
+  const openProgressDialog = (item: TodoItem, minPercent?: number) => {
     progressItem.value = item;
     progressData.value = {
       date: new Date().toISOString().slice(0, 16),
-      percent: 0,
+      percent: typeof minPercent === 'number' ? minPercent : 0,
     };
     showProgressDialogFlag.value = true;
   };
