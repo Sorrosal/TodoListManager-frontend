@@ -66,8 +66,7 @@ describe('useTodoDialogs', () => {
 
   describe('openEditDialog', () => {
     it('should open edit dialog with item data', () => {
-      const { openEditDialog, showAddDialog, editingItem, formData } =
-        useTodoDialogs();
+      const { openEditDialog, showAddDialog, editingItem, formData } = useTodoDialogs();
 
       openEditDialog(mockTodoItem);
 
@@ -97,8 +96,7 @@ describe('useTodoDialogs', () => {
 
   describe('openHistoryDialog', () => {
     it('should open history dialog with item', () => {
-      const { openHistoryDialog, showHistoryDialogFlag, historyItem } =
-        useTodoDialogs();
+      const { openHistoryDialog, showHistoryDialogFlag, historyItem } = useTodoDialogs();
 
       openHistoryDialog(mockTodoItem);
 
@@ -132,8 +130,7 @@ describe('useTodoDialogs', () => {
 
   describe('closeProgressDialog', () => {
     it('should close progress dialog', () => {
-      const { openProgressDialog, closeProgressDialog, showProgressDialogFlag } =
-        useTodoDialogs();
+      const { openProgressDialog, closeProgressDialog, showProgressDialogFlag } = useTodoDialogs();
 
       // First open
       openProgressDialog(mockTodoItem);
@@ -148,8 +145,7 @@ describe('useTodoDialogs', () => {
 
   describe('resetForm', () => {
     it('should reset form data and editing item', () => {
-      const { openEditDialog, resetForm, editingItem, formData } =
-        useTodoDialogs();
+      const { openEditDialog, resetForm, editingItem, formData } = useTodoDialogs();
 
       // First populate
       openEditDialog(mockTodoItem);
