@@ -36,15 +36,19 @@ describe('useTodoItems', () => {
       title: 'Work Task',
       description: 'Description 1',
       category: 'Work',
-      progressions: [
-        { id: 1, date: '2024-01-01T00:00:00Z', percent: 50, todoItemId: 1 },
-      ],
+      totalProgress: 50,
+      isCompleted: false,
+      lastProgressionDate: '2024-01-01T00:00:00Z',
+      progressions: [{ id: 1, date: '2024-01-01T00:00:00Z', percent: 50, todoItemId: 1 }],
     },
     {
       id: 2,
       title: 'Personal Task',
       description: 'Description 2',
       category: 'Personal',
+      totalProgress: 0,
+      isCompleted: false,
+      lastProgressionDate: null,
       progressions: [],
     },
     {
@@ -52,9 +56,10 @@ describe('useTodoItems', () => {
       title: 'Another Work Task',
       description: 'Description 3',
       category: 'Work',
-      progressions: [
-        { id: 2, date: '2024-01-02T00:00:00Z', percent: 75, todoItemId: 3 },
-      ],
+      totalProgress: 75,
+      isCompleted: false,
+      lastProgressionDate: '2024-01-02T00:00:00Z',
+      progressions: [{ id: 2, date: '2024-01-02T00:00:00Z', percent: 75, todoItemId: 3 }],
     },
   ];
 
@@ -249,10 +254,7 @@ describe('useTodoItems', () => {
       const { registerProgress } = useTodoItems();
       const result = await registerProgress(1, progressData);
 
-      expect(todoListService.registerProgression).toHaveBeenCalledWith(
-        1,
-        progressData
-      );
+      expect(todoListService.registerProgression).toHaveBeenCalledWith(1, progressData);
       expect(result).toBe(true);
       expect(Notify.create).toHaveBeenCalledWith({
         type: 'positive',

@@ -7,16 +7,13 @@ import { apiClient } from './api.client';
 import type { LoginRequest, LoginResponse, UserInfo } from 'src/models';
 
 class AuthService {
-  private readonly BASE_PATH = '/api/v1/Auth';
+  private readonly BASE_PATH = '/api/Auth';
 
   /**
    * Authenticates a user and returns a JWT token
    */
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const response = await apiClient.post<LoginResponse>(
-      `${this.BASE_PATH}/login`,
-      credentials
-    );
+    const response = await apiClient.post<LoginResponse>(`${this.BASE_PATH}/login`, credentials);
     return response.data;
   }
 

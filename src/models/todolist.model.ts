@@ -8,9 +8,10 @@ export interface TodoItem {
   title: string;
   description: string;
   category: string;
-  createdAt?: string;
-  updatedAt?: string;
-  progressions?: ProgressionEntry[];
+  totalProgress: number;
+  isCompleted: boolean;
+  lastProgressionDate: string | null;
+  progressions: ProgressionEntry[];
 }
 
 export interface AddItemRequest {
@@ -40,4 +41,9 @@ export interface ApiResponse<T> {
   data?: T;
   message?: string;
   errors?: string[];
+}
+
+export interface TodoListResponse {
+  items: TodoItem[];
+  totalCount: number;
 }

@@ -9,27 +9,25 @@ import type {
   AddItemRequest,
   UpdateItemRequest,
   RegisterProgressionRequest,
+  TodoListResponse,
 } from 'src/models';
 
 class TodoListService {
-  private readonly BASE_PATH = '/api/v1/TodoList';
+  private readonly BASE_PATH = '/api/TodoList';
 
   /**
    * Gets all todo items
    */
   async getAllItems(): Promise<TodoItem[]> {
-    const response = await apiClient.get<TodoItem[]>(`${this.BASE_PATH}/items`);
-    return response.data;
+    const response = await apiClient.get<TodoListResponse>(`${this.BASE_PATH}/items`);
+    return response.data.items;
   }
 
   /**
    * Adds a new todo item
    */
   async addItem(item: AddItemRequest): Promise<TodoItem> {
-    const response = await apiClient.post<TodoItem>(
-      `${this.BASE_PATH}/items`,
-      item
-    );
+    const response = await apiClient.post<TodoItem>(`${this.BASE_PATH}/items`, item);
     return response.data;
   }
 
@@ -37,10 +35,7 @@ class TodoListService {
    * Updates the description of an existing todo item
    */
   async updateItem(id: number, update: UpdateItemRequest): Promise<TodoItem> {
-    const response = await apiClient.put<TodoItem>(
-      `${this.BASE_PATH}/items/${id}`,
-      update
-    );
+    const response = await apiClient.put<TodoItem>(`${this.BASE_PATH}/items/${id}`, update);
     return response.data;
   }
 
@@ -54,14 +49,8 @@ class TodoListService {
   /**
    * Registers a progression entry for a todo item
    */
-  async registerProgression(
-    id: number,
-    progression: RegisterProgressionRequest
-  ): Promise<void> {
-    await apiClient.post(
-      `${this.BASE_PATH}/items/${id}/progressions`,
-      progression
-    );
+  async registerProgression(id: number, progression: RegisterProgressionRequest): Promise<void> {
+    await apiClient.post(`${this.BASE_PATH}/items/${id}/progressions`, progression);
   }
 
   /**
