@@ -136,8 +136,8 @@ describe('TodoHistoryDialog', () => {
     });
 
     expect(mockGetProgressColor).toHaveBeenCalledWith(25);
-    expect(mockGetProgressColor).toHaveBeenCalledWith(50);
     expect(mockGetProgressColor).toHaveBeenCalledWith(75);
+    expect(mockGetProgressColor).toHaveBeenCalledWith(100);
     wrapper.unmount();
   });
 

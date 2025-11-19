@@ -46,10 +46,7 @@ describe('AuthService', () => {
 
       const result = await authService.login(mockLoginRequest);
 
-      expect(apiClient.post).toHaveBeenCalledWith(
-        '/api/v1/Auth/login',
-        mockLoginRequest
-      );
+      expect(apiClient.post).toHaveBeenCalledWith('/api/Auth/login', mockLoginRequest);
       expect(result).toEqual(mockLoginResponse);
     });
 
@@ -57,9 +54,7 @@ describe('AuthService', () => {
       const error = new Error('Invalid credentials');
       vi.mocked(apiClient.post).mockRejectedValue(error);
 
-      await expect(authService.login(mockLoginRequest)).rejects.toThrow(
-        'Invalid credentials'
-      );
+      await expect(authService.login(mockLoginRequest)).rejects.toThrow('Invalid credentials');
     });
   });
 
@@ -69,7 +64,7 @@ describe('AuthService', () => {
 
       const result = await authService.getCurrentUser();
 
-      expect(apiClient.get).toHaveBeenCalledWith('/api/v1/Auth/me');
+      expect(apiClient.get).toHaveBeenCalledWith('/api/Auth/me');
       expect(result).toEqual(mockUserInfo);
     });
 
