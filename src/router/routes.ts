@@ -1,10 +1,11 @@
 import type { RouteRecordRaw } from 'vue-router';
+import { authService } from 'src/services';
 
 const routes: RouteRecordRaw[] = [
-  // Redirect root to login by default (will be overridden by guard if authenticated)
+  // Redirect root dynamically depending on authentication to avoid intermediate /login flash
   {
     path: '/',
-    redirect: '/login',
+    redirect: () => (authService.isAuthenticated() ? '/todos' : '/login'),
   },
 
   // Public routes

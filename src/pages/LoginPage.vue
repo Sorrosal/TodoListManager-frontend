@@ -64,8 +64,8 @@ import { authService } from 'src/services';
 const router = useRouter();
 
 const credentials = ref({
-  username: '',
-  password: '',
+  username: 'admin',
+  password: 'admin',
 });
 
 const showPassword = ref(false);
