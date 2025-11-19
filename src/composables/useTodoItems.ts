@@ -5,7 +5,12 @@
 import { ref, computed } from 'vue';
 import { Notify, Dialog } from 'quasar';
 import { todoListService } from 'src/services';
-import type { TodoItem, AddItemRequest, UpdateItemRequest, RegisterProgressionRequest } from 'src/models';
+import type {
+  TodoItem,
+  AddItemRequest,
+  UpdateItemRequest,
+  RegisterProgressionRequest,
+} from 'src/models';
 
 export function useTodoItems() {
   const items = ref<TodoItem[]>([]);
@@ -13,7 +18,7 @@ export function useTodoItems() {
 
   const itemsByCategory = computed(() => {
     const grouped: Record<string, TodoItem[]> = {};
-    items.value.forEach(item => {
+    items.value.forEach((item) => {
       if (!grouped[item.category]) {
         grouped[item.category] = [];
       }
@@ -89,31 +94,33 @@ export function useTodoItems() {
         message: `Are you sure you want to delete "${item.title}"?`,
         cancel: true,
         persistent: true,
-      }).onOk(() => {
-        void (async () => {
-          try {
-            await todoListService.deleteItem(item.id);
-            Notify.create({
-              type: 'positive',
-              message: 'Task deleted successfully!',
-              position: 'top',
-            });
-            await fetchItems();
-            resolve();
-          } catch (error: unknown) {
-            console.error('Failed to delete item:', error);
-            const axiosError = error as { response?: { data?: { message?: string } } };
-            Notify.create({
-              type: 'negative',
-              message: axiosError?.response?.data?.message || 'Failed to delete task.',
-              position: 'top',
-            });
-            reject(error instanceof Error ? error : new Error(String(error)));
-          }
-        })();
-      }).onCancel(() => {
-        reject(new Error('Cancelled'));
-      });
+      })
+        .onOk(() => {
+          void (async () => {
+            try {
+              await todoListService.deleteItem(item.id);
+              Notify.create({
+                type: 'positive',
+                message: 'Task deleted successfully!',
+                position: 'top',
+              });
+              await fetchItems();
+              resolve();
+            } catch (error: unknown) {
+              console.error('Failed to delete item:', error);
+              const axiosError = error as { response?: { data?: { message?: string } } };
+              Notify.create({
+                type: 'negative',
+                message: axiosError?.response?.data?.message || 'Failed to delete task.',
+                position: 'top',
+              });
+              reject(error instanceof Error ? error : new Error(String(error)));
+            }
+          })();
+        })
+        .onCancel(() => {
+          reject(new Error('Cancelled'));
+        });
     });
   };
 
@@ -157,9 +164,24 @@ export function useTodoItems() {
 
   const getSortedProgressions = (item: TodoItem) => {
     if (!item.progressions) return [];
-    return [...item.progressions].sort((a, b) => 
-      new Date(b.date).getTime() - new Date(a.date).getTime()
+
+    // Sort by date ascending first to calculate cumulative progress
+    const sorted = [...item.progressions].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
+
+    // Calculate cumulative progress for each entry
+    let cumulative = 0;
+    const withCumulative = sorted.map((progression) => {
+      cumulative = Math.min(100, cumulative + progression.percent);
+      return {
+        ...progression,
+        cumulativePercent: cumulative,
+      };
+    });
+
+    // Return in descending order (most recent first)
+    return withCumulative.reverse();
   };
 
   const formatDate = (dateString: string): string => {
@@ -169,7 +191,7 @@ export function useTodoItems() {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 

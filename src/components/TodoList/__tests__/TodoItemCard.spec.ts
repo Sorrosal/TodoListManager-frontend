@@ -9,9 +9,10 @@ describe('TodoItemCard', () => {
     title: 'Test Task',
     description: 'Test Description',
     category: 'Work',
-    progressions: [
-      { id: 1, date: '2024-01-01T00:00:00Z', percent: 50, todoItemId: 1 },
-    ],
+    totalProgress: 50,
+    isCompleted: false,
+    lastProgressionDate: '2024-01-01T00:00:00Z',
+    progressions: [{ id: 1, date: '2024-01-01T00:00:00Z', percent: 50, todoItemId: 1 }],
   };
 
   it('should render item title and description', () => {

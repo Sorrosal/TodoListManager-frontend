@@ -9,6 +9,9 @@ describe('TodoHistoryDialog', () => {
     title: 'Test Task',
     description: 'Test Description',
     category: 'Work',
+    totalProgress: 75,
+    isCompleted: false,
+    lastProgressionDate: '2024-01-03T10:00:00Z',
     progressions: [
       { id: 1, date: '2024-01-01T10:00:00Z', percent: 25, todoItemId: 1 },
       { id: 2, date: '2024-01-02T10:00:00Z', percent: 50, todoItemId: 1 },
@@ -18,9 +21,24 @@ describe('TodoHistoryDialog', () => {
 
   const mockGetSortedProgressions = vi.fn((item: TodoItem) => {
     if (!item.progressions) return [];
-    return [...item.progressions].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+
+    // Sort by date ascending to calculate cumulative
+    const sorted = [...item.progressions].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
+
+    // Calculate cumulative progress
+    let cumulative = 0;
+    const withCumulative = sorted.map((progression) => {
+      cumulative = Math.min(100, cumulative + progression.percent);
+      return {
+        ...progression,
+        cumulativePercent: cumulative,
+      };
+    });
+
+    // Return in descending order (most recent first)
+    return withCumulative.reverse();
   });
 
   const mockFormatDate = vi.fn((date: string) => {
@@ -129,6 +147,9 @@ describe('TodoHistoryDialog', () => {
       title: 'Test Task',
       description: 'Test Description',
       category: 'Work',
+      totalProgress: 0,
+      isCompleted: false,
+      lastProgressionDate: null,
       progressions: [],
     };
 

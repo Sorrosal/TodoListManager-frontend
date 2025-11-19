@@ -31,6 +31,10 @@ describe('TodoFormDialog', () => {
       title: 'Existing Task',
       description: 'Existing Description',
       category: 'Work',
+      totalProgress: 0,
+      isCompleted: false,
+      lastProgressionDate: null,
+      progressions: [],
     };
 
     const wrapper = mount(TodoFormDialog, {
@@ -70,6 +74,10 @@ describe('TodoFormDialog', () => {
       title: 'Existing Task',
       description: 'Existing Description',
       category: 'Work',
+      totalProgress: 0,
+      isCompleted: false,
+      lastProgressionDate: null,
+      progressions: [],
     };
 
     const wrapper = mount(TodoFormDialog, {
@@ -119,7 +127,7 @@ describe('TodoFormDialog', () => {
     // Component receives isSaving prop and passes it to the button
     // Quasar will handle the loading state visualization
     expect((wrapper.props() as { isSaving: boolean }).isSaving).toBe(true);
-    const saveButton = wrapper.findAll('button').find(btn => btn.text().includes('Save'));
+    const saveButton = wrapper.findAll('button').find((btn) => btn.text().includes('Save'));
     expect(saveButton?.exists()).toBe(true);
     wrapper.unmount();
   });
@@ -152,7 +160,7 @@ describe('TodoFormDialog', () => {
     });
 
     // Verify cancel button exists (v-close-popup is a Quasar directive that handles closing)
-    const cancelButton = wrapper.findAll('button').find(btn => btn.text() === 'Cancel');
+    const cancelButton = wrapper.findAll('button').find((btn) => btn.text() === 'Cancel');
     expect(cancelButton?.exists()).toBe(true);
     wrapper.unmount();
   });
