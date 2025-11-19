@@ -309,6 +309,10 @@ describe('useTodoItems', () => {
         title: 'Test',
         description: 'Test',
         category: 'Work',
+        totalProgress: 0,
+        isCompleted: false,
+        lastProgressionDate: null,
+        progressions: [],
       };
 
       const result = getLatestProgress(item);
@@ -323,6 +327,9 @@ describe('useTodoItems', () => {
         title: 'Accumulated',
         description: 'Testing',
         category: 'Work',
+        totalProgress: 96,
+        isCompleted: false,
+        lastProgressionDate: '2025-11-18T18:43:00Z',
         progressions: [
           { id: 1, date: '2025-11-18T18:38:00Z', percent: 9, todoItemId: 1 },
           { id: 2, date: '2025-11-18T18:40:00Z', percent: 31, todoItemId: 1 },
@@ -368,6 +375,9 @@ describe('useTodoItems', () => {
         title: 'Test',
         description: 'Test',
         category: 'Work',
+        totalProgress: 75,
+        isCompleted: false,
+        lastProgressionDate: '2024-01-03T00:00:00Z',
         progressions: [
           { id: 1, date: '2024-01-01T00:00:00Z', percent: 25, todoItemId: 1 },
           { id: 2, date: '2024-01-03T00:00:00Z', percent: 75, todoItemId: 1 },
@@ -389,6 +399,10 @@ describe('useTodoItems', () => {
         title: 'Test',
         description: 'Test',
         category: 'Work',
+        totalProgress: 0,
+        isCompleted: false,
+        lastProgressionDate: null,
+        progressions: [],
       };
 
       const { getSortedProgressions } = useTodoItems();

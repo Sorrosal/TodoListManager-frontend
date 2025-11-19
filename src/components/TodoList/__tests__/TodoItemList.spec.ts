@@ -11,6 +11,9 @@ describe('TodoItemList', () => {
       title: 'Work Task 1',
       description: 'Description 1',
       category: 'Work',
+      totalProgress: 0,
+      isCompleted: false,
+      lastProgressionDate: null,
       progressions: [],
     },
     {
@@ -18,6 +21,9 @@ describe('TodoItemList', () => {
       title: 'Work Task 2',
       description: 'Description 2',
       category: 'Work',
+      totalProgress: 0,
+      isCompleted: false,
+      lastProgressionDate: null,
       progressions: [],
     },
     {
@@ -25,6 +31,9 @@ describe('TodoItemList', () => {
       title: 'Personal Task',
       description: 'Description 3',
       category: 'Personal',
+      totalProgress: 0,
+      isCompleted: false,
+      lastProgressionDate: null,
       progressions: [],
     },
   ];

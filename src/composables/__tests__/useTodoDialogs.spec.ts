@@ -8,6 +8,9 @@ describe('useTodoDialogs', () => {
     title: 'Test Task',
     description: 'Test Description',
     category: 'Work',
+    totalProgress: 0,
+    isCompleted: false,
+    lastProgressionDate: null,
     progressions: [],
   };
 
